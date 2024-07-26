@@ -38,7 +38,7 @@ def read_from_json(json_file: str) -> Any:
     return data
 
 
-def parallel_process(func: function, data: list) ->list:
+def parallel_process(func, data: list) ->list:
     """Use parallel processing, where a single functions processes a list of items
 
     Args:
@@ -52,8 +52,8 @@ def parallel_process(func: function, data: list) ->list:
     from os import cpu_count
     
     # Count the number of CPUs and take them as maximum number of workers for processing
-    
-    num_workers = min(len(data), cpu_count())
+    num_cpus = cpu_count()
+    num_workers = min(len(data), num_cpus)
     
     with ProcessPoolExecutor(num_workers) as executor:
         # Submit tasks to be executed
@@ -73,4 +73,12 @@ def parallel_process(func: function, data: list) ->list:
 
 
 if __name__ == "__main__":
-    pass
+    
+    def square(x):
+        return x*x
+    
+    my_data = list(range(20))
+    
+    answer = parallel_process(func=square, data=my_data)
+    
+    print(answer)
