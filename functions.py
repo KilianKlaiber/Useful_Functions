@@ -38,7 +38,7 @@ def read_from_json(json_file: str) -> Any:
     return data
 
 
-def parallel_process(func, data: list) ->list:
+def parallel_process(func, data: list) ->list | None:
     """Use parallel processing, where a single functions processes a list of items
 
     Args:
@@ -53,21 +53,32 @@ def parallel_process(func, data: list) ->list:
     
     # Count the number of CPUs and take them as maximum number of workers for processing
     num_cpus = cpu_count()
-    num_workers = min(len(data), num_cpus)
+    if num_cpus != None:
+        num_workers = min(len(data), num_cpus)
+    else:
+        print("No parallel processing possible due to lack of CPUs")
+        return None
     
+    # Perform Multitasking
     with ProcessPoolExecutor(num_workers) as executor:
-        # Submit tasks to be executed
-        futures = [executor.submit(func, date) for date in data]
+        # Submit tasks to be executed with dictionary comprehension
+        # Keys: The keys of this dictionary are the Future objects returned by executor.submit(func, date).
+        # values:  indices (idx) of the elements in the data list, provided by enumerate(data)
+        futures = {executor.submit(func, date): idx for idx, date in enumerate(data)}
+        # futures = [executor.submit(func, date) for date in data]
         
-        results = []
-        for future in as_completed(futures):
+       # Create empty list with length equal to length of data
+        results = [None] * len(data)
+        
+        # for each result retrieve the corresponding index.
+        for future in futures:
+            idx = futures[future]
+            # add the result at the corresponding index to the results list.
             try:
-                result = future.result()
-                results.append(result)
+                results[idx] = future.result()
             except Exception as e:
                 # Handle the exception (print, log, etc.)
-                print(f"Error processing data: {e}")
-    
+                print(f"Error processing data at index {idx}: {e}")
     return results
 
 
