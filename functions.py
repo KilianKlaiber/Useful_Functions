@@ -11,10 +11,10 @@ def write_to_json(data: Any, json_file: str) -> None:
     Args:
         data: preferably structured data such as lists or dictionaries to be stored in a JSON file
     """
-    import json
+    from json import dumps
 
     with open(json_file, "w") as file:
-        contents = json.dumps(data, indent=2)
+        contents = dumps(data, indent=2)
         file.write(contents)
 
 
@@ -30,11 +30,11 @@ def read_from_json(json_file: str) -> Any:
     Returns:
         _type_: content of the JSON file as list or dictionary
     """
-    import json
+    from json import loads
 
     with open(json_file, "r") as file:
         contents = file.read()
-        data = json.loads(contents)
+        data = loads(contents)
     return data
 
 
@@ -82,12 +82,30 @@ def parallel_process(func, data: list) ->list | None:
     return results
 
 
+def measure_time(source: str, algorithm: str, data: Any) -> float:
+    """Measure time it taks for a function/algorithm to process data
+
+    Args:
+        source (str): Name of the library containing the function
+        algorithm (str): Name of the function to be executed
+        data (Any): datum passed to the function as argument
+
+    Returns:
+        float: execution time of the function in seconds.
+    """
+    from timeit import timeit
+    
+    setup_code = f"from {source} import {algorithm}"
+    stmt = f"{algorithm}({data})"
+    execution_time = timeit(stmt, setup=setup_code, number=1)
+    return execution_time
+
 
 if __name__ == "__main__":
     
     def square(x):
         return x*x
-    numbers = list(range(20))
+    numbers = list(range(100000))
     
     result = parallel_process(square, numbers)
     
