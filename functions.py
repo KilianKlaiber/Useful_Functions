@@ -47,6 +47,7 @@ def parallel_process(func, data: list) ->list | None:
 
     Returns:
         list: Return the result of processing the data with the functions as a list.
+        None: Return None if an error occurs.
     """
     from concurrent.futures import ProcessPoolExecutor, as_completed
     from os import cpu_count
@@ -71,17 +72,23 @@ def parallel_process(func, data: list) ->list | None:
         results = [None] * len(data)
         
         # for each result retrieve the corresponding index.
-        for future in futures:
+        for future in as_completed(futures):
             idx = futures[future]
             # add the result at the corresponding index to the results list.
             try:
                 results[idx] = future.result()
             except Exception as e:
-                # Handle the exception (print, log, etc.)
                 print(f"Error processing data at index {idx}: {e}")
     return results
 
 
 
 if __name__ == "__main__":
-    pass
+    
+    def square(x):
+        return x*x
+    numbers = list(range(20))
+    
+    result = parallel_process(square, numbers)
+    
+    print(result)
