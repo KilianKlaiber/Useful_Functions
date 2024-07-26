@@ -101,12 +101,34 @@ def measure_time(source: str, algorithm: str, data: Any) -> float:
     return execution_time
 
 
+def speed_compare_algorithms( data: list, algorithm1: str, algorithm2: str, source1: str, source2: str) ->list[tuple] | None:
+    """Compare speed of algorithms
+    
+    Let different algorithms run on the same set of data.
+    Return the time for executing the algorithms for said data in a list of tuples.
+
+    Args:
+        data (list): A list of data points, which are arguments of both functions.
+        algorithm1 (str): Name of functions/alogorithms performing taskon data.
+        algorithm2 (str): ""
+        source1, source2 (str): Name of module containing algorithm1 or algorithm2, respectively.
+
+    Returns:
+        list[tuple] | None: List of tuples containing: 
+        (datum, execution time for algorithm1, execution time for algorithm2)
+    """
+    return_list = list()
+    for datum in data:
+        al1_time = measure_time(source1, algorithm1, datum)
+        al2_time = measure_time(source2, algorithm2, datum)
+        result = (datum, al1_time, al2_time)
+        return_list.append(result)
+
+    return return_list
+    
+
 if __name__ == "__main__":
+    data_list = list(range(15))
+    answer = speed_compare_algorithms(data_list, "square1", "square2","square", "square")
     
-    def square(x):
-        return x*x
-    numbers = list(range(100000))
-    
-    result = parallel_process(square, numbers)
-    
-    print(result)
+    print(answer)
