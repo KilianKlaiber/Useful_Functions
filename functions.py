@@ -38,5 +38,39 @@ def read_from_json(json_file: str) -> Any:
     return data
 
 
+def parallel_process(func: function, data: list) ->list:
+    """Use parallel processing, where a single functions processes a list of items
+
+    Args:
+        func (function): Pass the name of the function, that is to be executed in parallel
+        data (list): List of items, each item is to be processed by the function.
+
+    Returns:
+        list: Return the result of processing the data with the functions as a list.
+    """
+    from concurrent.futures import ProcessPoolExecutor, as_completed
+    from os import cpu_count
+    
+    # Count the number of CPUs and take them as maximum number of workers for processing
+    
+    num_workers = min(len(data), cpu_count())
+    
+    with ProcessPoolExecutor(num_workers) as executor:
+        # Submit tasks to be executed
+        futures = [executor.submit(func, date) for date in data]
+        
+        results = []
+        for future in as_completed(futures):
+            try:
+                result = future.result()
+                results.append(result)
+            except Exception as e:
+                # Handle the exception (print, log, etc.)
+                print(f"Error processing data: {e}")
+    
+    return results
+
+
+
 if __name__ == "__main__":
     pass
