@@ -128,8 +128,21 @@ def speed_compare_algorithms(
 
 
 def display_speed_comparison(
-    speed_results: list[tuple], algorithm_1="Algorithm 1", algorithm_2="Algorithm 2"
+    speed_results: list[tuple],
+    algorithm_1: str = "Algorithm 1",
+    algorithm_2: str = "Algorithm 2",
 ) -> None:
+    """Display execution times in graph
+
+    Retrieve data as well as execution times from two different algorithms.
+    Display results in a graph.
+
+    Args:
+        speed_results (list[tuple]): List of tuples, each tuple containing:
+        (datum, execution time for algorithm1, execution time for algorithm2)
+        algorithm1 (str): Name of first algorithm.
+        algorithm2 (str): Name of second function.
+    """
 
     from matplotlib import pyplot as plt
 
@@ -155,4 +168,6 @@ if __name__ == "__main__":
         data_list, "square1", "square2", "square", "square"
     )
 
-    display_speed_comparison(answer)
+    display_speed_comparison(
+        answer, algorithm_1="easy square", algorithm_2="complicated square"
+    )
