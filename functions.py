@@ -26,10 +26,10 @@ def read_from_json(json_file: str) -> Any:
     which is returned by the function.
 
     Args:
-        json_file (name.json): Name of a json file stored in working directory
+        json_file (string): Name of a json file stored in working directory
 
     Returns:
-        _type_: content of the JSON file as list or dictionary
+        Any: content of the JSON file as python data structure
     """
     from json import loads
 
@@ -89,8 +89,7 @@ def measure_time(source: str, algorithm: str, data: Any) -> float:
         algorithm (str): Name of the function to be executed
         data (Any): datum passed to the function as argument
 
-    Returns:
-        float: execution time of the function in seconds.
+    Returns (float): execution time of the function in seconds.
     """
     from timeit import timeit
 
@@ -115,8 +114,8 @@ def speed_compare_algorithms(
         source1, source2 (str): Name of module containing algorithm1 and algorithm2, respectively.
 
     Returns:
-        list[tuple]: List of tuples, each tuple containing:
-        (datum, execution time for algorithm1, execution time for algorithm2) 
+        list (tuple): List of tuples, each tuple containing:
+        (datum, execution time for algorithm1, execution time for algorithm2)
     """
     return_list = list()
     for datum in data:
@@ -128,10 +127,32 @@ def speed_compare_algorithms(
     return return_list
 
 
+def display_speed_comparison(
+    speed_results: list[tuple], algorithm_1="Algorithm 1", algorithm_2="Algorithm 2"
+) -> None:
+
+    from matplotlib import pyplot as plt
+
+    input_sizes = [result[0] for result in speed_results]
+    algorithm_1_times = [result[1] for result in speed_results]
+    algorithm_2_times = [result[2] for result in speed_results]
+
+    # Plot the first curve for kilian2 algo
+    plt.plot(input_sizes, algorithm_1_times, label=algorithm_1)
+    # Plot the second curve for merge_sort algo
+    plt.plot(input_sizes, algorithm_2_times, label=algorithm_2)
+
+    plt.xlabel("Input Data")
+    plt.ylabel("Execution Time (seconds)")
+    plt.title("Execution Time of Algorithms")
+    plt.legend()
+    plt.show()
+
+
 if __name__ == "__main__":
     data_list = list(range(15))
     answer = speed_compare_algorithms(
         data_list, "square1", "square2", "square", "square"
     )
 
-    print(answer)
+    display_speed_comparison(answer)
