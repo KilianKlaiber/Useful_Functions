@@ -9,7 +9,8 @@ def write_to_json(data: Any, json_file: str) -> None:
     The content of the JSON is completely deleted and replaced by the new content written into the file
 
     Args:
-        data: preferably structured data such as lists or dictionaries to be stored in a JSON file
+        data (Any): preferably structured data such as lists or dictionaries to be stored in a JSON file
+        json_file (string): Name of the Json file as a string.
     """
     from json import dumps
 
@@ -63,15 +64,13 @@ def parallel_process(func, data: list) -> list | None:
     # Perform Multitasking
     with ProcessPoolExecutor(num_workers) as executor:
         # Submit tasks to be executed with dictionary comprehension
-        # Keys: The keys of this dictionary are the Future objects returned by executor.submit(func, date).
-        # values:  indices (idx) of the elements in the data list, provided by enumerate(data)
+        # Keys: objects returned by executor.submit(func, date).
+        # values: indices (idx) of the elements of data
         futures = {executor.submit(func, date): idx for idx, date in enumerate(data)}
-        # futures = [executor.submit(func, date) for date in data]
-
-        # Create empty list with length equal to length of data
-        results = [None] * len(data)
 
         # for each result retrieve the corresponding index.
+        results = [None] * len(data)
+        # return futures if possible.
         for future in as_completed(futures):
             idx = futures[future]
             # add the result at the corresponding index to the results list.
@@ -103,7 +102,7 @@ def measure_time(source: str, algorithm: str, data: Any) -> float:
 
 def speed_compare_algorithms(
     data: list, algorithm_1: str, algorithm_2: str, source_1: str, source_2: str
-) -> list[tuple] | None:
+) -> list[tuple]:
     """Compare speed of algorithms
 
     Let different algorithms run on the same set of data.
@@ -111,13 +110,13 @@ def speed_compare_algorithms(
 
     Args:
         data (list): A list of data points, which are arguments of both functions.
-        algorithm1 (str): Name of functions/alogorithms performing taskon data.
-        algorithm2 (str): ""
-        source1, source2 (str): Name of module containing algorithm1 or algorithm2, respectively.
+        algorithm1 (str): Name of function/algorithm performing task on data.
+        algorithm2 (str): Name of second function to be compared.
+        source1, source2 (str): Name of module containing algorithm1 and algorithm2, respectively.
 
     Returns:
-        list[tuple] | None: List of tuples containing:
-        (datum, execution time for algorithm1, execution time for algorithm2)
+        list[tuple]: List of tuples, each tuple containing:
+        (datum, execution time for algorithm1, execution time for algorithm2) 
     """
     return_list = list()
     for datum in data:
