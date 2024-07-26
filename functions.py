@@ -39,5 +39,4 @@ def read_from_json(json_file: str) -> Any:
 
 
 if __name__ == "__main__":
-    ma = read_from_json("my.json")
-    print(ma)
+    pass
