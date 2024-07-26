@@ -84,12 +84,4 @@ def parallel_process(func, data: list) ->list | None:
 
 
 if __name__ == "__main__":
-    
-    def square(x):
-        return x*x
-    
-    my_data = list(range(20))
-    
-    answer = parallel_process(func=square, data=my_data)
-    
-    print(answer)
+    pass
