@@ -148,9 +148,24 @@ def save_speed_comparison(
     JSON_data = [(json_file, algorithm_1, algorithm_2), speed_results]
 
     write_to_json(JSON_data, json_file)
-    
+
     return None
 
+def read_speed_comparison(json_file: str) -> list[list]:
+    """Read speed comparison data from JSON-file
+
+    Args:
+        json_file (str): JSON-File comprising measurement results from
+        speed comparisons.
+
+    Returns:
+        list(list): list[0] = ['filenmae.json', '1. Algorithm', '2. Algorithm']
+                    list[1] = list of list each comprising:
+                    [datum, exec-time 1. Algorithm, exec_time 2. Algorithm]
+    """
+    retrieved_list = read_from_json(json_file)
+
+    return retrieved_list
 
 def display_speed_comparison(
     speed_results: list[tuple],
@@ -188,18 +203,28 @@ def display_speed_comparison(
 
 
 if __name__ == "__main__":
-    data_list = list(range(15))
+    
+    result = read_speed_comparison("Square.json")
+    
+    print(result[0])
+    print(result[1])
+    
+    """ data_list = list(range(10, 25))
     answer = speed_compare_algorithms(
         data_list, "square1", "square2", "square", "square"
     )
 
     display_speed_comparison(
         answer, algorithm_1="easy square", algorithm_2="complicated square"
-    )
+    ) """
 
-    save_speed_comparison(
+    """    save_speed_comparison(
         answer,
         "Square.json",
         algorithm_1="easy square",
         algorithm_2="complicated square",
     )
+    
+    
+    """
+    
