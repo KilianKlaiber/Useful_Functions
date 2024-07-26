@@ -54,7 +54,7 @@ def parallel_process(func, data: list) ->list | None:
     
     # Count the number of CPUs and take them as maximum number of workers for processing
     num_cpus = cpu_count()
-    if num_cpus != None:
+    if num_cpus != None and num_cpus >= 2:
         num_workers = min(len(data), num_cpus)
     else:
         print("No parallel processing possible due to lack of CPUs")
