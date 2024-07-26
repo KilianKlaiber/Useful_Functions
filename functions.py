@@ -6,10 +6,12 @@ from typing import Any
 def write_to_json(data: Any, json_file: str) -> None:
     """Write Data to JSON File
 
-    The content of the JSON is completely deleted and replaced by the new content written into the file
+    The content of the JSON is completely deleted and replaced by the new content
+    written into the file.
 
     Args:
-        data (Any): preferably structured data such as lists or dictionaries to be stored in a JSON file
+        data (Any): preferably structured data such as lists or dictionaries
+        to be stored in a JSON file.
         json_file (string): Name of the Json file as a string.
     """
     from json import dumps
@@ -127,6 +129,29 @@ def speed_compare_algorithms(
     return return_list
 
 
+def save_speed_comparison(
+    speed_results: list[tuple],
+    json_file: str,
+    algorithm_1: str = "Algorithm 1",
+    algorithm_2: str = "Algorithm 2",
+) -> None:
+    """Save speed  comparision to JSON-File
+
+    Args:
+        speed_results (list[tuple]): List of tuples, each tuple containing:
+        (datum, execution time for algorithm1, execution time for algorithm2)
+        json_file (str): Name of JSON-File for storing data
+        algorithm_1 (str, optional): Name of first Algorithm. Defaults to "Algorithm 1".
+        algorithm_2 (str, optional): Name of second Algorithm. Defaults to "Algorithm 2".
+    """
+
+    JSON_data = [(json_file, algorithm_1, algorithm_2), speed_results]
+
+    write_to_json(JSON_data, json_file)
+    
+    return None
+
+
 def display_speed_comparison(
     speed_results: list[tuple],
     algorithm_1: str = "Algorithm 1",
@@ -170,4 +195,11 @@ if __name__ == "__main__":
 
     display_speed_comparison(
         answer, algorithm_1="easy square", algorithm_2="complicated square"
+    )
+
+    save_speed_comparison(
+        answer,
+        "Square.json",
+        algorithm_1="easy square",
+        algorithm_2="complicated square",
     )
